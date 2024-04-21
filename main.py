@@ -30,6 +30,9 @@ class User:
     def get_user_id(self):
         return self.__user_id
 
+    def get_user_name(self):
+        return self.__name
+
     def info(self):
         access_description = "Обычный доступ" if self.__access == 'user' else "Доступ отсутствует"
         print(f"ID пользователя {self.__name}: {self.__user_id}")
@@ -37,13 +40,13 @@ class User:
 
 
 class Admin(User):
-    def __init__(self, user_id, name):
+    def __init__(self, user_id, name, access):
         super().__init__(user_id, name)
-        self.__access = 'admin'  # Повышенный уровень доступа для администраторов
+        self.__access = access
         self.__user_db = []  # База данных пользователей
 
-    def add_user(self, user_id, name):
-        new_user = User(user_id, name)
+    def add_user(self, user_id, name, access):
+        new_user = Admin(user_id, name, access)
         self.__user_db.append(new_user)
         print(f"Пользователь {name} добавлен в базу данных с ID: {user_id}")
 
@@ -59,6 +62,19 @@ class Admin(User):
         for user in self.__user_db:
             user.info()
 
+    def info(self):
+        if self.__access == 'admin':
+            access_description = "Полный доступ"
+        elif self.__access == 'user':
+            access_description = "Обычный доступ"
+        else:
+            access_description = "Доступ отсутствует"
+        print(f"ID пользователя {self.get_user_name()}: {self.get_user_id()}")
+        print(f"Уровень доступа пользователя {self.get_user_name()}: {access_description}")
+
+
+# Добавление администратора (не в базу данных)
+admin = Admin(0, "Юрий", "admin")
 
 # Добавление пользователей (не в базу данных)
 user1 = User(1, "Петя")
@@ -66,17 +82,14 @@ user2 = User(2, "Вася")
 
 print("\n==========================================================================")
 print("============== Просмотр информации о доступах пользователях ==============\n")
+admin.info()
 user1.info()
 user2.info()
 
-
-# Конфигурация роли администратора
-admin = Admin(0, "Юрий")
-
 print("\n==========================================================================")
 print("== Добавление пользователей в базу данных с помощью прав администратора ==\n")
-admin.add_user(3, "Сергей")
-admin.add_user(4, "Маша")
+admin.add_user(3, "Сергей", "user")
+admin.add_user(4, "Маша", "admin")
 
 print("\n==========================================================================")
 print("=================== Просмотр базы данных пользователей ===================\n")

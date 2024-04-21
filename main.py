@@ -48,7 +48,7 @@ class Admin(User):
     def add_user(self, user_id, name, access):
         new_user = Admin(user_id, name, access)
         self.__user_db.append(new_user)
-        print(f"Пользователь {name} добавлен в базу данных с ID: {user_id}")
+        print(f"Пользователь {name} с доступом '{access}' добавлен в базу данных с ID: {user_id}")
 
     def remove_user(self, user_id):
         for i, user in enumerate(self.__user_db):
